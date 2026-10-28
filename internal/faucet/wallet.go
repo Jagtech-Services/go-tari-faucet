@@ -1,8 +1,8 @@
 package faucet
 
 import (
-	"github.com/Snipa22/go-tari-grpc-lib/v3/tari_generated"
-	"github.com/Snipa22/go-tari-lib/v2/walletGRPC"
+	"github.com/Jagtech-Services/go-tari-grpc-lib/v3/tari_generated"
+	"github.com/Jagtech-Services/go-tari-lib/v3/walletGRPC"
 )
 
 // WalletClient is the narrow GRPC surface Service depends on. It mirrors

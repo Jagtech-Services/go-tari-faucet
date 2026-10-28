@@ -9,7 +9,7 @@ Instructions for AI coding agents (OpenCode, Claude Code, or any `agents.md`-com
 ## Project
 
 - **What this repo is:** Tari testnet faucet — dispenses test Tari to requesters, includes payout-powering logic.
-- **Module path:** `github.com/Snipa22/go-tari-faucet`
+- **Module path:** `github.com/Jagtech-Services/go-tari-faucet`
 - **Depends on:** `go-tari-grpc-lib` (GRPC wrapper), `go-tari-lib` (helpers, if used), `core-go-lib` (shared utilities)
 
 ## Commands

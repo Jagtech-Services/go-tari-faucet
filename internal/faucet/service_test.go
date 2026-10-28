@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Snipa22/go-tari-grpc-lib/v3/tari_generated"
+	"github.com/Jagtech-Services/go-tari-grpc-lib/v3/tari_generated"
 )
 
 // fakeRepo is an in-memory Repository test double, following the same
