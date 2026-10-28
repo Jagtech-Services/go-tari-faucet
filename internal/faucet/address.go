@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/Snipa22/go-tari-lib/v2/address"
+	"github.com/Jagtech-Services/go-tari-lib/v3/address"
 )
 
 // ErrPaymentIDNotAllowed is a faucet-specific policy rejection, not an

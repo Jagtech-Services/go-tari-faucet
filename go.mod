@@ -1,11 +1,11 @@
-module github.com/Snipa22/go-tari-faucet
+module github.com/Jagtech-Services/go-tari-faucet
 
 go 1.24.0
 
 require (
-	github.com/Snipa22/core-go-lib v1.2.0
-	github.com/Snipa22/go-tari-grpc-lib/v3 v3.2.1-0.20260816155812-abc39e19311d
-	github.com/Snipa22/go-tari-lib/v2 v2.0.0
+	github.com/Jagtech-Services/core-go-lib v1.3.0
+	github.com/Jagtech-Services/go-tari-grpc-lib/v3 v3.5.0
+	github.com/Jagtech-Services/go-tari-lib/v3 v3.1.0
 	github.com/gtank/ristretto255 v0.2.0
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/sirupsen/logrus v1.9.3

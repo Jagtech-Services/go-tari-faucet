@@ -17,9 +17,9 @@ import (
 	"os"
 	"time"
 
-	core "github.com/Snipa22/core-go-lib/milieu"
-	"github.com/Snipa22/go-tari-faucet/internal/faucet"
-	"github.com/Snipa22/go-tari-lib/v2/walletGRPC"
+	core "github.com/Jagtech-Services/core-go-lib/milieu"
+	"github.com/Jagtech-Services/go-tari-faucet/internal/faucet"
+	"github.com/Jagtech-Services/go-tari-lib/v3/walletGRPC"
 	"github.com/sirupsen/logrus"
 )
 
