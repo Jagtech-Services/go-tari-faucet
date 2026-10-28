@@ -1,0 +1,77 @@
+# Changelog
+
+## 1.0.0 (2026-10-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **payoutDaemon:** complete initial development
+
+### Features
+
+* add always-visible Ootle L2 burn-guide link to faucet page ([74ad03d](https://github.com/Jagtech-Services/go-tari-faucet/commit/74ad03db9b17a37502c15c436609eca615db1a49))
+* add background-polled wallet status cache for balance/healthz ([84f4933](https://github.com/Jagtech-Services/go-tari-faucet/commit/84f493307d53a5edce3af52e7d6bc0a6542ca909))
+* add optional Cloudflare Turnstile CAPTCHA verification to /request ([904a278](https://github.com/Jagtech-Services/go-tari-faucet/commit/904a2785803044bfe39cc33c2ba9e1e8f8ea3632))
+* add optional network-nickname (e.g. Esme) to faucet branding ([fa84e0f](https://github.com/Jagtech-Services/go-tari-faucet/commit/fa84e0f80606fb1f77b2e4fec636e157e3194f80))
+* add optional random dispense amount range via -dispense-max-amount ([305c22f](https://github.com/Jagtech-Services/go-tari-faucet/commit/305c22f1266d7f7fd2f5afc9e1b0ee190ce3c056))
+* apply JAGTECH branding, wallet balance display, and honeypot anti-spam ([f6e4d03](https://github.com/Jagtech-Services/go-tari-faucet/commit/f6e4d031b5fcfdd67ce570e4446b797526a4bdd6))
+* **balance:** add all balance getter ([3ff22d1](https://github.com/Jagtech-Services/go-tari-faucet/commit/3ff22d1574ec9327e562c8195826c0c59ed439d7))
+* **balance:** add balance decrement ([ef669f7](https://github.com/Jagtech-Services/go-tari-faucet/commit/ef669f729a3d17479a5ff38ea9d1901a7440c430))
+* **balance:** add get id by address ([916564d](https://github.com/Jagtech-Services/go-tari-faucet/commit/916564d42861171aa42a2d883da6f53f22a72849))
+* **batch:** add batch insert ([0545ef8](https://github.com/Jagtech-Services/go-tari-faucet/commit/0545ef8112f23a6a27421128e78ac4ed0b220cfa))
+* bump dispense amount from 1 XTM to 10,000 XTM ([49d7f4f](https://github.com/Jagtech-Services/go-tari-faucet/commit/49d7f4f625cd69325a60388cc9dc8b0735840a67))
+* **cmd:** add new cmd for mined_at_height ([1bc926c](https://github.com/Jagtech-Services/go-tari-faucet/commit/1bc926cf91fa43d1a58246ec3d7f3c561134ae0f))
+* **cmd:** add reject reset command ([c042aab](https://github.com/Jagtech-Services/go-tari-faucet/commit/c042aab32a31aeec9e58a94e6cb544f23e347d26))
+* **cmd:** add txbackfill tool ([0376178](https://github.com/Jagtech-Services/go-tari-faucet/commit/0376178debb31877f0e33a4585f4ebd2a90ddcc9))
+* display user-facing Tari amounts as XTM, not raw microMinotari ([8122de5](https://github.com/Jagtech-Services/go-tari-faucet/commit/8122de592f7db7991ca0b7ab8f95c98dd1dbb042))
+* implement Tari testnet faucet HTTP service ([21fc756](https://github.com/Jagtech-Services/go-tari-faucet/commit/21fc756b8f4aa3c68017d3c707012776f84d1640))
+* make ticker branding (tXTM/XTM) configurable via -ticker flag ([827d64c](https://github.com/Jagtech-Services/go-tari-faucet/commit/827d64c0c75885832ca1d1fe24119407b4c521f1))
+* **paymentDaemon:** add payment id ([813d1ea](https://github.com/Jagtech-Services/go-tari-faucet/commit/813d1ea8770a85f642f3bb40463c5762ed51dea0))
+* **paymentDaemon:** add txn recheck start ([1517ff0](https://github.com/Jagtech-Services/go-tari-faucet/commit/1517ff02773667869b1078aba7567e596c90fdc2))
+* **payoutDaemon:** add shell + idea files ([87a02c6](https://github.com/Jagtech-Services/go-tari-faucet/commit/87a02c68d4bed0e9d94fa9d171c06bcd9f6fa909))
+* **payoutDaemon:** complete initial development ([84769bc](https://github.com/Jagtech-Services/go-tari-faucet/commit/84769bc26398e4d9eb96fc45a622e5c24ba4e180))
+* reject addresses carrying a payment-id feature bit ([81e3df1](https://github.com/Jagtech-Services/go-tari-faucet/commit/81e3df1a3b6225a6c34b2928a2ca1b22e1e728d2))
+* **transaction:** add transaction logging ([6066e23](https://github.com/Jagtech-Services/go-tari-faucet/commit/6066e2351edbb043839b02b8c8a4588fefe248b0))
+
+
+### Bug Fixes
+
+* also make network label (Testnet/Mainnet) configurable alongside ticker ([16274d1](https://github.com/Jagtech-Services/go-tari-faucet/commit/16274d161670ab29dbf007a4ded191c8c1a3cc4f))
+* **batch:** correct milieu to ptr ([8f2dd42](https://github.com/Jagtech-Services/go-tari-faucet/commit/8f2dd42c7680d0d6996d84d12821f014319db909))
+* close TOCTOU race in Dispense with atomic advisory-lock reservation ([6dab907](https://github.com/Jagtech-Services/go-tari-faucet/commit/6dab9076c7adbc3197522579d8df6c614525c034))
+* migrate wallet GRPC address from Tailscale to local network ([82b500b](https://github.com/Jagtech-Services/go-tari-faucet/commit/82b500b0f368e0d462890ada75b783201d74c01e))
+* **paymentBatch:** add the sentTxns for scan ([40c2582](https://github.com/Jagtech-Services/go-tari-faucet/commit/40c258208bba9b41f89068b49f325f30f38bfd05))
+* **paymentBatch:** break up txn block ([da5aa71](https://github.com/Jagtech-Services/go-tari-faucet/commit/da5aa7152150b2d6fe8252020bcf35ed37a57219))
+* **paymentBatch:** correct batch counter ([cb385fb](https://github.com/Jagtech-Services/go-tari-faucet/commit/cb385fb6f37d6a578615cb65dcf1aea8ddda68d3))
+* **paymentBatch:** correct on conflict ([d4b5c96](https://github.com/Jagtech-Services/go-tari-faucet/commit/d4b5c96d515bf66f2d9b2cd8e628eba09f2d5c5a))
+* **paymentBatch:** fix the on conflict ([e0c2bfd](https://github.com/Jagtech-Services/go-tari-faucet/commit/e0c2bfd9a28cd27eb985fbc88a65cbb60aecf168))
+* **paymentBatch:** fix the on conflict ([e0bda3d](https://github.com/Jagtech-Services/go-tari-faucet/commit/e0bda3dbca2dd997cf3f1cf273517d736e9d24bb))
+* **paymentBatch:** move failures to error ([a9533da](https://github.com/Jagtech-Services/go-tari-faucet/commit/a9533da50f8be59323869cb03231e193cdf05ea6))
+* **paymentBatch:** perform sql in-line ([e141b70](https://github.com/Jagtech-Services/go-tari-faucet/commit/e141b7093775a6930c110f4bbb4db762b21103ff))
+* **paymentDaemon:** add invalid handling ([b38ab4c](https://github.com/Jagtech-Services/go-tari-faucet/commit/b38ab4c126b75614f3913d0ba120488e493797af))
+* **paymentDaemon:** allow overwrite of txns ([37dc17a](https://github.com/Jagtech-Services/go-tari-faucet/commit/37dc17a59d0c6ed5e738db0326f9d340c827d0a6))
+* **paymentDaemon:** append the recipient ([b956294](https://github.com/Jagtech-Services/go-tari-faucet/commit/b95629411d813d84390a3d76d970a0bf2f61c678))
+* **paymentDaemon:** handle final insert error ([d1f9110](https://github.com/Jagtech-Services/go-tari-faucet/commit/d1f91104a3e95ee0a114f607a7ae872746d67b14))
+* **paymentDaemon:** invert final insert error check ([5e9b1be](https://github.com/Jagtech-Services/go-tari-faucet/commit/5e9b1beafbea6de886078473591d357ea560239e))
+* **paymentDaemon:** nil payment id ([f895e1c](https://github.com/Jagtech-Services/go-tari-faucet/commit/f895e1c7f1b4698b65b51980f1ec9be0f6aec06d))
+* **paymentDaemon:** properly trap 0 txids ([deb510c](https://github.com/Jagtech-Services/go-tari-faucet/commit/deb510c38b50239af31595c1e6163442ddecce6f))
+* **paymentDaemon:** remove tailscale ip ([768be18](https://github.com/Jagtech-Services/go-tari-faucet/commit/768be18959d397d154a91bcd25f2847546d64cdf))
+* **payoutDaemon:** add batch size + halt ([582034f](https://github.com/Jagtech-Services/go-tari-faucet/commit/582034f569c2b1ad992a6291945e8f855f2f18e9))
+* **payoutDaemon:** add debug for bad payments ([2af535e](https://github.com/Jagtech-Services/go-tari-faucet/commit/2af535e0475bf2a061ab37d58d6f3a4c27de87c5))
+* **payoutDaemon:** add halt in txn looper ([369a254](https://github.com/Jagtech-Services/go-tari-faucet/commit/369a2541fa5c31e355bee5b423abacc1bee71ff6))
+* **payoutDaemon:** arrange highest bal first ([ef75ffc](https://github.com/Jagtech-Services/go-tari-faucet/commit/ef75ffcad241b1a79f0da76fc23f31b2644bd712))
+* **payoutDaemon:** catch not-found txn ([0f52184](https://github.com/Jagtech-Services/go-tari-faucet/commit/0f521843698e6a61d6bf161cc303b668a17aa31c))
+* **payoutDaemon:** check for redis key on txn ([1b84297](https://github.com/Jagtech-Services/go-tari-faucet/commit/1b84297e9746232c7ad6311b9136bf134be5871c))
+* **payoutDaemon:** disable secret one sided txns ([ca904fc](https://github.com/Jagtech-Services/go-tari-faucet/commit/ca904fc55720a401d86490fa3f11897eba101928))
+* **payoutDaemon:** quit on dry-run ([7c108ee](https://github.com/Jagtech-Services/go-tari-faucet/commit/7c108eea427479e3a6c6c7a56e1554733bddb65c))
+* **payoutDaemon:** remove small fee to cover gas ([b4a2a75](https://github.com/Jagtech-Services/go-tari-faucet/commit/b4a2a75f27adebefb3886c509e06d5dc8331b5f9))
+* **payoutDaemon:** update sql table ([e8d8cfd](https://github.com/Jagtech-Services/go-tari-faucet/commit/e8d8cfda47755045c10d0fc55ebcc93fbd45d5f3))
+* **rejectReset:** cleanup txn ([47e000c](https://github.com/Jagtech-Services/go-tari-faucet/commit/47e000c0bf72870a0d4f4b4d787075c5576dc354))
+* remove duplicate ticker in random-range intro copy ([8d14bf6](https://github.com/Jagtech-Services/go-tari-faucet/commit/8d14bf6d3dd039b74a8c9d37fc33b5fb3b376827))
+* show real wallet balance on /request response, not always 0 XTM ([553057c](https://github.com/Jagtech-Services/go-tari-faucet/commit/553057ccb85fb9fd06dda90d3dfecbaa19599864))
+* **sql/balances:** add date_updated update ([3ab6bc3](https://github.com/Jagtech-Services/go-tari-faucet/commit/3ab6bc35180162a2cb8e69f8cd1e0310c74a0bce))
+* target go-tari-lib/v2 module path ([09128dc](https://github.com/Jagtech-Services/go-tari-faucet/commit/09128dc5512e4683ed77ab12a35117fbff565978))
+* thread singleTx through WalletClient.SendTransactions for go-tari-lib update ([e9e81a2](https://github.com/Jagtech-Services/go-tari-faucet/commit/e9e81a2eeb1d63d7877702d28b552200a7a073cd))
+* **transactions:** modify batch id to int ([6493552](https://github.com/Jagtech-Services/go-tari-faucet/commit/649355265ea13e49f7d7280449d360d7d416516a))
+* **txnBackfill:** build proper txn list ([cf492e8](https://github.com/Jagtech-Services/go-tari-faucet/commit/cf492e84d806a58f3b7a15c858465f485a43bd7d))
+* **txnBackfill:** perform chain scan ([b2fcf49](https://github.com/Jagtech-Services/go-tari-faucet/commit/b2fcf49b4c6c8e1001551525a7c130ed594b0fc4))
