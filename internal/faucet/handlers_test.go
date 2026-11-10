@@ -440,7 +440,87 @@ func TestHandler_Healthz(t *testing.T) {
 			t.Fatalf("status = %d, want 503, body: %s", rec.Code, rec.Body.String())
 		}
 	})
+
+	t.Run("OotleStatus nil (not wired) leaves the response byte-for-byte unchanged", func(t *testing.T) {
+		wallet := &fakeWallet{connectivity: &tari_generated.CheckConnectivityResponse{
+			Status: tari_generated.CheckConnectivityResponse_Online,
+		}}
+		cache := NewStatusCache()
+		cache.poll(wallet)
+		h := newTestHandlerWithCache(&fakeRepo{}, wallet, &fakeClock{now: time.Now()}, cache)
+		req := httptest.NewRequest(http.MethodGet, "/healthz", nil)
+		rec := httptest.NewRecorder()
+		h.Healthz(rec, req)
+		if rec.Code != http.StatusOK {
+			t.Fatalf("status = %d, want 200", rec.Code)
+		}
+		if rec.Body.String() != "ok\n" {
+			t.Errorf("body = %q, want %q (must be unchanged when OotleStatus is unset)", rec.Body.String(), "ok\n")
+		}
+	})
+
+	t.Run("OotleStatus up is reported additively without affecting the 200 status", func(t *testing.T) {
+		wallet := &fakeWallet{connectivity: &tari_generated.CheckConnectivityResponse{
+			Status: tari_generated.CheckConnectivityResponse_Online,
+		}}
+		cache := NewStatusCache()
+		cache.poll(wallet)
+		h := newTestHandlerWithCache(&fakeRepo{}, wallet, &fakeClock{now: time.Now()}, cache)
+		h.OotleStatus = &fakeOotleStatusChecker{up: true, ok: true}
+		req := httptest.NewRequest(http.MethodGet, "/healthz", nil)
+		rec := httptest.NewRecorder()
+		h.Healthz(rec, req)
+		if rec.Code != http.StatusOK {
+			t.Fatalf("status = %d, want 200 (ootle status must never affect the overall status)", rec.Code)
+		}
+		if !strings.Contains(rec.Body.String(), "ootle_wallet: up") {
+			t.Errorf("body = %q, want it to contain %q", rec.Body.String(), "ootle_wallet: up")
+		}
+	})
+
+	t.Run("OotleStatus down is reported additively without flipping 200 to 503", func(t *testing.T) {
+		wallet := &fakeWallet{connectivity: &tari_generated.CheckConnectivityResponse{
+			Status: tari_generated.CheckConnectivityResponse_Online,
+		}}
+		cache := NewStatusCache()
+		cache.poll(wallet)
+		h := newTestHandlerWithCache(&fakeRepo{}, wallet, &fakeClock{now: time.Now()}, cache)
+		h.OotleStatus = &fakeOotleStatusChecker{up: false, ok: true}
+		req := httptest.NewRequest(http.MethodGet, "/healthz", nil)
+		rec := httptest.NewRecorder()
+		h.Healthz(rec, req)
+		if rec.Code != http.StatusOK {
+			t.Fatalf("status = %d, want 200 (an unreachable Ootle wallet-daemon must never take down the rest of the service, including the L1 path this endpoint primarily guards)", rec.Code)
+		}
+		if !strings.Contains(rec.Body.String(), "ootle_wallet: down") {
+			t.Errorf("body = %q, want it to contain %q", rec.Body.String(), "ootle_wallet: down")
+		}
+	})
+
+	t.Run("OotleStatus unknown (never polled) is reported as such", func(t *testing.T) {
+		wallet := &fakeWallet{connectivity: &tari_generated.CheckConnectivityResponse{
+			Status: tari_generated.CheckConnectivityResponse_Online,
+		}}
+		cache := NewStatusCache()
+		cache.poll(wallet)
+		h := newTestHandlerWithCache(&fakeRepo{}, wallet, &fakeClock{now: time.Now()}, cache)
+		h.OotleStatus = &fakeOotleStatusChecker{ok: false}
+		req := httptest.NewRequest(http.MethodGet, "/healthz", nil)
+		rec := httptest.NewRecorder()
+		h.Healthz(rec, req)
+		if !strings.Contains(rec.Body.String(), "ootle_wallet: unknown") {
+			t.Errorf("body = %q, want it to contain %q", rec.Body.String(), "ootle_wallet: unknown")
+		}
+	})
 }
+
+// fakeOotleStatusChecker is an in-memory OotleStatusChecker test double.
+type fakeOotleStatusChecker struct {
+	up bool
+	ok bool
+}
+
+func (f *fakeOotleStatusChecker) Get() (bool, bool) { return f.up, f.ok }
 
 // errStub is a trivial sentinel error for tests that only care that an
 // error occurred, not its content.
