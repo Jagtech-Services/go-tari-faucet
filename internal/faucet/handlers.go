@@ -49,10 +49,36 @@ type Handler struct {
 	// supplies one.
 	StatusCache *StatusCache
 
+	// OotleStatus, when non-nil, lets Healthz additionally report the
+	// Ootle (L2) wallet-daemon's reachability alongside the existing
+	// Postgres/L1-wallet checks -- purely informational (see
+	// Healthz's doc comment: it never flips the overall 200/503
+	// decision). This package deliberately does not import
+	// internal/ootle at all; OotleStatusChecker is a narrow,
+	// structurally-satisfied interface so main.go can wire an
+	// *ootle.StatusCache in here without either package depending on
+	// the other's concrete types. Nil (the zero value --
+	// e.g. every existing test that builds a Handler without setting
+	// this) means "not wired in this deployment," and Healthz's
+	// output is byte-for-byte unchanged from before this field
+	// existed.
+	OotleStatus OotleStatusChecker
+
 	// HTTPClient is used for outbound HTTP calls (currently just Cloudflare
 	// Turnstile siteverify). Defaults to http.DefaultClient when nil -- tests
 	// inject a mock via httpClient interface / http.Client{Transport: ...}.
 	HTTPClient httpDoer
+}
+
+// OotleStatusChecker is the narrow surface Handler.Healthz optionally
+// reads from to report Ootle (L2) wallet-daemon reachability. Any type
+// with a matching Get method -- e.g. *ootle.StatusCache -- satisfies
+// this purely structurally, with no import needed on either side.
+type OotleStatusChecker interface {
+	// Get returns the last-known reachability (up) paired with
+	// whether that value came from a completed poll (ok); ok == false
+	// means "unknown, never successfully polled yet," not "down".
+	Get() (up bool, ok bool)
 }
 
 // NewHandler builds a Handler around svc, reading wallet balance/
@@ -198,19 +224,51 @@ func (h *Handler) Request(w http.ResponseWriter, r *http.Request) {
 // The wallet check reads StatusCache's last-known connectivity poll
 // instead of dialing the wallet per request, so a slow/hung wallet GRPC
 // call can never delay this response.
+//
+// When OotleStatus is non-nil, an additional "ootle_wallet: up|down|unknown"
+// line is appended to the response body, purely informational -- the
+// Ootle (L2) wallet-daemon's reachability (or the component address
+// simply not being configured yet) never flips this endpoint's 200/503
+// status, since the rest of the service (including the L1 path this
+// endpoint primarily exists to guard) must keep reporting healthy
+// regardless of the L2 path's state. When OotleStatus is nil (every
+// deployment/test that doesn't wire it), the response is byte-for-byte
+// identical to before this field existed.
 func (h *Handler) Healthz(w http.ResponseWriter, r *http.Request) {
+	ootleLine := h.ootleStatusLine()
 	if err := h.Service.Repo.Ping(r.Context()); err != nil {
 		w.WriteHeader(http.StatusServiceUnavailable)
 		_, _ = fmt.Fprintf(w, "unhealthy: %v\n", err)
+		_, _ = fmt.Fprint(w, ootleLine)
 		return
 	}
 	if _, _, walletUp, walletUpOK := h.StatusCache.Get(); !walletUpOK || !walletUp {
 		w.WriteHeader(http.StatusServiceUnavailable)
 		_, _ = fmt.Fprintln(w, "unhealthy: wallet GRPC connectivity is not online")
+		_, _ = fmt.Fprint(w, ootleLine)
 		return
 	}
 	w.WriteHeader(http.StatusOK)
 	_, _ = fmt.Fprintln(w, "ok")
+	_, _ = fmt.Fprint(w, ootleLine)
+}
+
+// ootleStatusLine renders OotleStatus's current reachability as an
+// extra response line, or "" (appending nothing) when OotleStatus is
+// nil -- see Healthz's doc comment.
+func (h *Handler) ootleStatusLine() string {
+	if h.OotleStatus == nil {
+		return ""
+	}
+	up, ok := h.OotleStatus.Get()
+	switch {
+	case !ok:
+		return "ootle_wallet: unknown\n"
+	case up:
+		return "ootle_wallet: up\n"
+	default:
+		return "ootle_wallet: down\n"
+	}
 }
 
 // describeAddressError renders go-tari-lib/address's parse errors as a
